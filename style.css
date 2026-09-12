@@ -179,39 +179,79 @@ body {
 .link-more:hover { text-decoration: underline; }
 
 /* Videos */
-.videos { padding: 20px 0 60px; }
+.videos { padding: 60px 0 20px; }
 
 .videos h2 {
   font-size: 1.9rem;
   color: var(--brand);
   text-align: center;
+  margin-bottom: 8px;
+}
+
+.videos .lead {
+  text-align: center;
+  color: var(--muted);
   margin-bottom: 28px;
 }
 
-.video-grid {
+.video-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: 1.5fr 1fr;
   gap: 24px;
+  align-items: start;
 }
 
-.video-grid iframe,
-.video-grid video {
+.video-frame { position: sticky; top: 90px; }
+
+.video-frame iframe,
+#ytplayer {
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 0;
   border-radius: 14px;
   box-shadow: 0 8px 24px rgba(26,35,126,.15);
   background: #000;
+  display: block;
 }
 
-.video-placeholder {
-  grid-column: 1 / -1;
-  text-align: center;
-  color: var(--muted);
+.chapters {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chapters button {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  text-align: right;
+  font-family: inherit;
+  font-size: .95rem;
+  line-height: 1.4;
+  color: var(--text);
   background: #fff;
-  border: 2px dashed #c9d4e2;
-  border-radius: 14px;
-  padding: 50px 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+
+.chapters button:hover { border-color: var(--accent); }
+
+.chapters button.active {
+  background: #fff4e6;
+  border-color: var(--accent);
+}
+
+.ch-time {
+  font-weight: 700;
+  color: var(--brand);
+  direction: ltr;
+  unicode-bidi: embed;
+  flex-shrink: 0;
 }
 
 /* Contact */
@@ -309,6 +349,8 @@ body {
 /* Mobile */
 @media (max-width: 800px) {
   .cards { grid-template-columns: 1fr; }
+  .video-layout { grid-template-columns: 1fr; }
+  .video-frame { position: static; }
   .contact-actions { flex-direction: column; align-items: center; }
   .hero { padding: 55px 0; }
   .hero h1 { font-size: 2rem; }

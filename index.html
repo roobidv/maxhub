@@ -56,6 +56,26 @@
       <img class="feature-banner" src="images/wireless-share.jpg" alt="מורה משתפת תוכן אלחוטית על מסך MAXHUB">
     </section>
 
+    <section id="videos" class="videos">
+      <h2>סרטון הדרכה — MAXHUB</h2>
+      <p class="lead">לחצו על פרק כדי לקפוץ ישר אליו בסרטון</p>
+      <div class="video-layout">
+        <div class="video-frame"><div id="ytplayer"></div></div>
+        <ol class="chapters">
+          <li><button data-t="0"><span class="ch-time">0:00</span> מבוא — דגמי מסכי MAXHUB, סדרות וגדלים</button></li>
+          <li><button data-t="51"><span class="ch-time">0:51</span> כתיבה על הלוח באצבע — מחיקה, זום ואזור כתיבה אינסופי</button></li>
+          <li><button data-t="87"><span class="ch-time">1:27</span> זיהוי כתב יד וכתיבה במקביל של שני משתמשים</button></li>
+          <li><button data-t="130"><span class="ch-time">2:10</span> רגישות לחץ והוספת תמונות ללוח</button></li>
+          <li><button data-t="160"><span class="ch-time">2:40</span> שמירת שיעור — קוד QR לסריקה או שליחה במייל</button></li>
+          <li><button data-t="189"><span class="ch-time">3:09</span> שיקוף מסך הלפטופ על הלוח בלחיצה אחת</button></li>
+          <li><button data-t="203"><span class="ch-time">3:23</span> שיקוף בו-זמני של עד 4 מחשבים על המסך</button></li>
+          <li><button data-t="224"><span class="ch-time">3:44</span> חיבור הטלפון הנייד להצגת תוכן על הלוח</button></li>
+          <li><button data-t="238"><span class="ch-time">3:58</span> וידאו קונפרנס מובנה — מצלמה, מיקרופונים ורמקולים</button></li>
+          <li><button data-t="269"><span class="ch-time">4:29</span> סיכום — מודולים מתקדמים לתעשיות שונות</button></li>
+        </ol>
+      </div>
+    </section>
+
     <section id="why-ness" class="why-ness">
       <h2>למה נס מטח?</h2>
       <div class="cards">
@@ -78,20 +98,6 @@
       <blockquote>"טכנולוגיה היא האמצעי. הצלחת הלקוח היא המטרה."</blockquote>
       <p class="ceo-name">אילן זריהן, מנכ"ל נס מטח</p>
       <a class="link-more" href="https://site.ness-matach.co.il/ceo/" target="_blank" rel="noopener">דבר המנכ"ל המלא ←</a>
-    </section>
-
-    <section id="videos" class="videos">
-      <h2>סרטונים</h2>
-      <div class="video-grid">
-        <!--
-          כדי להוסיף סרטון YouTube — החליפו VIDEO_ID במזהה הסרטון:
-          <iframe src="https://www.youtube.com/embed/VIDEO_ID" allowfullscreen></iframe>
-
-          כדי להוסיף קובץ וידאו מקומי — שימו את הקובץ בתיקיית videos/ וכתבו:
-          <video src="videos/my-video.mp4" controls></video>
-        -->
-        <p class="video-placeholder">כאן יופיעו סרטוני ההדגמה — שלחו לי קבצי וידאו או קישורי YouTube ואוסיף אותם לאתר.</p>
-      </div>
     </section>
 
     <section id="contact" class="contact">
@@ -123,6 +129,40 @@
       <p>כיתות לימוד חכמות עם MAXHUB | © נס מטח</p>
     </div>
   </footer>
+
+  <script>
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('ytplayer', {
+        videoId: '9a6a4WW2w-Y',
+        playerVars: { rel: 0, modestbranding: 1, playsinline: 1, hl: 'he' }
+      });
+    }
+
+    var chapterBtns = document.querySelectorAll('.chapters button');
+    chapterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (player && player.seekTo) {
+          player.seekTo(parseInt(btn.dataset.t, 10), true);
+          player.playVideo();
+        }
+      });
+    });
+
+    var chapterStarts = Array.prototype.map.call(chapterBtns, function (b) { return +b.dataset.t; });
+    setInterval(function () {
+      if (!player || !player.getCurrentTime) return;
+      var t = player.getCurrentTime(), current = 0;
+      for (var i = 0; i < chapterStarts.length; i++) {
+        if (t >= chapterStarts[i]) current = i;
+      }
+      chapterBtns.forEach(function (b, i) { b.classList.toggle('active', i === current); });
+    }, 800);
+  </script>
 
 </body>
 </html>
