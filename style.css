@@ -43,9 +43,10 @@ body {
 .logo-link { display: flex; align-items: center; }
 
 .logo-img {
-  height: 52px;
+  height: 74px;
   width: auto;
   display: block;
+  border-radius: 8px;
 }
 
 .site-nav { display: flex; gap: 22px; }
@@ -73,10 +74,30 @@ body {
 }
 
 .hero-sub {
-  margin: 16px 0 30px;
+  margin: 16px 0 26px;
   font-size: 1.2rem;
   font-weight: 300;
   opacity: .95;
+}
+
+.hero-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  color: var(--brand);
+  border-radius: 14px;
+  padding: 10px 22px;
+  margin-bottom: 30px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+
+.hero-brand img {
+  height: 54px;
+  width: auto;
+  display: block;
 }
 
 .btn {
@@ -277,35 +298,51 @@ body {
   margin-bottom: 28px;
 }
 
-.contact-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 22px 34px;
-  box-shadow: 0 6px 20px rgba(26,35,126,.10);
-  color: var(--text);
-  text-decoration: none;
-  transition: transform .2s;
-}
-
-.contact-card:hover { transform: translateY(-3px); }
-.contact-card strong { color: var(--brand); display: block; margin-bottom: 6px; }
-
+.mail-btn,
 .whatsapp-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: #25d366;
-  color: #fff;
+  gap: 14px;
   font-weight: 700;
+  font-size: 1.1rem;
   border-radius: 14px;
-  padding: 22px 34px;
+  padding: 20px 34px;
   text-decoration: none;
-  box-shadow: 0 6px 20px rgba(37,211,102,.35);
   transition: transform .2s;
 }
 
+.mail-btn {
+  background: var(--brand);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(26,35,126,.30);
+}
+
+.mail-btn svg { width: 30px; height: 30px; flex-shrink: 0; }
+
+.whatsapp-btn {
+  background: #25d366;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(37,211,102,.35);
+}
+
+.whatsapp-btn img { width: 30px; height: 30px; flex-shrink: 0; }
+
+.mail-btn:hover,
 .whatsapp-btn:hover { transform: translateY(-3px); }
-.whatsapp-btn img { width: 28px; height: 28px; }
+
+.btn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.btn-text small {
+  font-weight: 400;
+  font-size: .85rem;
+  opacity: .9;
+}
 
 .links-row {
   display: flex;
@@ -338,10 +375,10 @@ body {
 }
 
 .footer-logo {
-  height: 40px;
-  border-radius: 6px;
+  height: 56px;
+  border-radius: 8px;
   background: #fff;
-  padding: 4px 8px;
+  padding: 4px 10px;
 }
 
 .site-footer p { opacity: .9; font-size: .95rem; }
@@ -355,5 +392,7 @@ body {
   .hero { padding: 55px 0; }
   .hero h1 { font-size: 2rem; }
   .site-nav { gap: 12px; font-size: .85rem; flex-wrap: wrap; justify-content: flex-end; }
-  .logo-img { height: 42px; }
+  .logo-img { height: 56px; }
+  .hero-brand { flex-direction: column; padding: 16px; font-size: .95rem; text-align: center; }
+  .hero-brand img { height: 46px; }
 }
