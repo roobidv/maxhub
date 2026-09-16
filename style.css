@@ -120,6 +120,35 @@ body {
   display: block;
 }
 
+/* Compare — boring classroom vs MAXHUB */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.compare-card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(26,35,126,.18);
+}
+
+.compare-card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+
+.compare-card figcaption {
+  padding: 14px 18px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--brand);
+}
+
 /* Why Ness */
 .why-ness { padding: 60px 0 20px; }
 
@@ -204,6 +233,7 @@ body {
 .video-frame { position: sticky; top: 90px; }
 
 .video-frame iframe,
+.video-frame video,
 #ytplayer {
   width: 100%;
   aspect-ratio: 16 / 9;
@@ -212,6 +242,12 @@ body {
   box-shadow: 0 8px 24px rgba(26,35,126,.15);
   background: #000;
   display: block;
+}
+
+.overview-video {
+  position: static;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 .chapters {
@@ -365,6 +401,7 @@ body {
 /* Mobile */
 @media (max-width: 800px) {
   .cards { grid-template-columns: 1fr; }
+  .compare { grid-template-columns: 1fr; }
   .video-layout { grid-template-columns: 1fr; }
   .video-frame { position: static; }
   .contact-actions { flex-direction: column; align-items: stretch; }
