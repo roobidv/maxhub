@@ -22,7 +22,7 @@
         <a href="#classroom">הכיתה החכמה</a>
         <a href="#remote">למידה מרחוק</a>
         <a href="#sharing">שיתוף תוכן</a>
-        <a href="#overview">סרטונים</a>
+        <a href="#videos">סרטונים</a>
         <a href="#contact">צור קשר</a>
       </nav>
     </div>
@@ -65,14 +65,6 @@
       <img class="feature-banner" src="images/wireless-share.jpg" alt="מורה משתפת תוכן אלחוטית על מסך MAXHUB">
     </section>
 
-    <section id="overview" class="videos">
-      <h2>סקירה כללית — מסך הלימוד לעולם החינוך</h2>
-      <p class="lead">הכירו את מסך MAXHUB בסיור קצר של יכולות המערכת</p>
-      <div class="video-frame overview-video">
-        <video controls preload="metadata" poster="images/overview-poster.jpg" src="videos/overview.mp4"></video>
-      </div>
-    </section>
-
     <section id="videos" class="videos">
       <h2>סרטון הדרכה — MAXHUB</h2>
       <p class="lead">לחצו על פרק כדי לקפוץ ישר אליו בסרטון</p>
@@ -89,6 +81,37 @@
           <li><button data-t="224"><span class="ch-time">3:44</span> חיבור הטלפון הנייד להצגת תוכן על הלוח</button></li>
           <li><button data-t="238"><span class="ch-time">3:58</span> למידה מרחוק בחירום — המורה בכיתה, התלמידים בבית בזום</button></li>
           <li><button data-t="269"><span class="ch-time">4:29</span> סיכום — מודולים מתקדמים לצרכים שונים</button></li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="overview" class="videos">
+      <h2>סקירה כללית — מסך הלימוד לעולם החינוך</h2>
+      <p class="lead">הכירו את מסך MAXHUB בסיור קצר של יכולות המערכת</p>
+      <div class="video-frame overview-video">
+        <video controls preload="metadata" poster="images/overview-poster.jpg" src="videos/overview.mp4"></video>
+      </div>
+    </section>
+
+    <section id="blackboard" class="videos">
+      <h2>MAXHUB Smart Blackboard — הלוח החכם האינטראקטיבי</h2>
+      <p class="lead">לחצו על פרק כדי לקפוץ ישר אליו בסרטון</p>
+      <div class="video-layout">
+        <div class="video-frame">
+          <video id="bbplayer" controls preload="metadata" poster="images/blackboard-poster.jpg" src="videos/smart-blackboard.mp4"></video>
+        </div>
+        <ol class="chapters">
+          <li><button data-t="0"><span class="ch-time">0:00</span> הבעיה — כיתה מסורתית: לוחות מלוכלכים, אבק ובלגן</button></li>
+          <li><button data-t="6"><span class="ch-time">0:06</span> החשיפה — לוח חכם בעיצוב משולב: מסך מרכזי + לוחות גיר</button></li>
+          <li><button data-t="10"><span class="ch-time">0:10</span> חומרה — מצלמה 16MP, מערך מיקרופונים, רמקולים וחיבורים קדמיים</button></li>
+          <li><button data-t="18"><span class="ch-time">0:18</span> כל החיבורים הרגילים של מחשב להתחברות המורה ומסך עם מיליארד צבעים בדיוק גבוה</button></li>
+          <li><button data-t="26"><span class="ch-time">0:26</span> כתיבה מסורתית — גיר ומרקרים על כנפי הלוח</button></li>
+          <li><button data-t="33"><span class="ch-time">0:33</span> ממשק המערכת — שורת הכלים התחתונה</button></li>
+          <li><button data-t="37"><span class="ch-time">0:37</span> שיעור חי — מצגת במרכז, כתיבה בצדדים, תלמידים משתתפים</button></li>
+          <li><button data-t="44"><span class="ch-time">0:44</span> יעילות בכיתה — תרגילים על המסך ושיקוף ללפטופים</button></li>
+          <li><button data-t="47"><span class="ch-time">0:47</span> מערכת EDU OS — מסך בית, התחברות ב-QR ואפליקציות</button></li>
+          <li><button data-t="52"><span class="ch-time">0:52</span> MAXHUB Class — טבלה מחזורית וסימולציות לימודיות</button></li>
+          <li><button data-t="63"><span class="ch-time">1:03</span> הפתרון המלא — חזון הכיתה החכמה</button></li>
         </ol>
       </div>
     </section>
@@ -160,25 +183,57 @@
       });
     }
 
-    var chapterBtns = document.querySelectorAll('.chapters button');
-    chapterBtns.forEach(function (btn) {
+    var chapterBtns = document.querySelectorAll('#videos .chapters button');
+    var chapterStarts = Array.prototype.map.call(chapterBtns, function (b) { return +b.dataset.t; });
+    var ytEnd = Infinity;
+
+    chapterBtns.forEach(function (btn, i) {
       btn.addEventListener('click', function () {
         if (player && player.seekTo) {
           player.seekTo(parseInt(btn.dataset.t, 10), true);
+          ytEnd = i + 1 < chapterStarts.length ? chapterStarts[i + 1] : Infinity;
           player.playVideo();
         }
       });
     });
 
-    var chapterStarts = Array.prototype.map.call(chapterBtns, function (b) { return +b.dataset.t; });
     setInterval(function () {
       if (!player || !player.getCurrentTime) return;
       var t = player.getCurrentTime(), current = 0;
+      if (t >= ytEnd) {
+        player.pauseVideo();
+        ytEnd = Infinity;
+      }
       for (var i = 0; i < chapterStarts.length; i++) {
         if (t >= chapterStarts[i]) current = i;
       }
       chapterBtns.forEach(function (b, i) { b.classList.toggle('active', i === current); });
     }, 800);
+
+    var bbVideo = document.getElementById('bbplayer');
+    var bbBtns = document.querySelectorAll('#blackboard .chapters button');
+    var bbStarts = Array.prototype.map.call(bbBtns, function (b) { return +b.dataset.t; });
+    var bbEnd = Infinity;
+
+    bbBtns.forEach(function (btn, i) {
+      btn.addEventListener('click', function () {
+        bbVideo.currentTime = parseInt(btn.dataset.t, 10);
+        bbEnd = i + 1 < bbStarts.length ? bbStarts[i + 1] : Infinity;
+        bbVideo.play();
+      });
+    });
+
+    bbVideo.addEventListener('timeupdate', function () {
+      var t = bbVideo.currentTime, current = 0;
+      if (t >= bbEnd) {
+        bbVideo.pause();
+        bbEnd = Infinity;
+      }
+      for (var i = 0; i < bbStarts.length; i++) {
+        if (t >= bbStarts[i]) current = i;
+      }
+      bbBtns.forEach(function (b, i) { b.classList.toggle('active', i === current); });
+    });
   </script>
 
 </body>
