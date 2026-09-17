@@ -69,17 +69,19 @@
       <h2>סרטון הדרכה — MAXHUB</h2>
       <p class="lead">לחצו על פרק כדי לקפוץ ישר אליו בסרטון</p>
       <div class="video-layout">
-        <div class="video-frame"><div id="ytplayer"></div></div>
+        <div class="video-frame">
+          <video id="tutplayer" controls preload="metadata" poster="images/tutorial-poster.jpg" src="videos/tutorial.mp4"></video>
+        </div>
         <ol class="chapters">
           <li><button data-t="0"><span class="ch-time">0:00</span> מבוא — דגמי מסכי MAXHUB, סדרות וגדלים</button></li>
           <li><button data-t="51"><span class="ch-time">0:51</span> כתיבה על הלוח באצבע — מחיקה, זום ואזור כתיבה אינסופי</button></li>
           <li><button data-t="87"><span class="ch-time">1:27</span> זיהוי כתב יד וכתיבה במקביל של שני תלמידים</button></li>
           <li><button data-t="130"><span class="ch-time">2:10</span> רגישות לחץ העט והוספת תמונות ללוח</button></li>
-          <li><button data-t="160"><span class="ch-time">2:40</span> שמירת שיעור בקוד QR ושליחתו לתלמיד בבית</button></li>
+          <li><button data-t="160"><span class="ch-time">2:40</span> שליחת קוד QR בוואטסאפ לתלמיד חולה שלא נכח בשיעור — אף תלמיד לא מפסיד שיעור</button></li>
           <li><button data-t="189"><span class="ch-time">3:09</span> שיקוף מסך הלפטופ על הלוח בלחיצה אחת</button></li>
           <li><button data-t="203"><span class="ch-time">3:23</span> שיקוף בו-זמני של עד 4 מחשבים על המסך</button></li>
           <li><button data-t="224"><span class="ch-time">3:44</span> חיבור הטלפון הנייד להצגת תוכן על הלוח</button></li>
-          <li><button data-t="238"><span class="ch-time">3:58</span> למידה מרחוק בחירום — המורה בכיתה, התלמידים בבית בזום</button></li>
+          <li><button data-t="238"><span class="ch-time">3:58</span> למידה בחירום — המורה בכיתה או במרכז החירום, התלמידים מפוזרים בארץ — הלמידה תמיד נמשכת ומתקיימת, גם בחירום</button></li>
           <li><button data-t="269"><span class="ch-time">4:29</span> סיכום — מודולים מתקדמים לצרכים שונים</button></li>
         </ol>
       </div>
@@ -171,69 +173,39 @@
   </footer>
 
   <script>
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
+    function setupChapters(video, btns) {
+      var starts = Array.prototype.map.call(btns, function (b) { return +b.dataset.t; });
+      var end = Infinity;
 
-    var player;
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('ytplayer', {
-        videoId: '9a6a4WW2w-Y',
-        playerVars: { rel: 0, modestbranding: 1, playsinline: 1, hl: 'he' }
+      btns.forEach(function (btn, i) {
+        btn.addEventListener('click', function () {
+          video.currentTime = parseInt(btn.dataset.t, 10);
+          end = i + 1 < starts.length ? starts[i + 1] : Infinity;
+          video.play();
+        });
+      });
+
+      video.addEventListener('timeupdate', function () {
+        var t = video.currentTime, current = 0;
+        if (t >= end) {
+          video.pause();
+          end = Infinity;
+        }
+        for (var i = 0; i < starts.length; i++) {
+          if (t >= starts[i]) current = i;
+        }
+        btns.forEach(function (b, i) { b.classList.toggle('active', i === current); });
       });
     }
 
-    var chapterBtns = document.querySelectorAll('#videos .chapters button');
-    var chapterStarts = Array.prototype.map.call(chapterBtns, function (b) { return +b.dataset.t; });
-    var ytEnd = Infinity;
-
-    chapterBtns.forEach(function (btn, i) {
-      btn.addEventListener('click', function () {
-        if (player && player.seekTo) {
-          player.seekTo(parseInt(btn.dataset.t, 10), true);
-          ytEnd = i + 1 < chapterStarts.length ? chapterStarts[i + 1] : Infinity;
-          player.playVideo();
-        }
-      });
-    });
-
-    setInterval(function () {
-      if (!player || !player.getCurrentTime) return;
-      var t = player.getCurrentTime(), current = 0;
-      if (t >= ytEnd) {
-        player.pauseVideo();
-        ytEnd = Infinity;
-      }
-      for (var i = 0; i < chapterStarts.length; i++) {
-        if (t >= chapterStarts[i]) current = i;
-      }
-      chapterBtns.forEach(function (b, i) { b.classList.toggle('active', i === current); });
-    }, 800);
-
-    var bbVideo = document.getElementById('bbplayer');
-    var bbBtns = document.querySelectorAll('#blackboard .chapters button');
-    var bbStarts = Array.prototype.map.call(bbBtns, function (b) { return +b.dataset.t; });
-    var bbEnd = Infinity;
-
-    bbBtns.forEach(function (btn, i) {
-      btn.addEventListener('click', function () {
-        bbVideo.currentTime = parseInt(btn.dataset.t, 10);
-        bbEnd = i + 1 < bbStarts.length ? bbStarts[i + 1] : Infinity;
-        bbVideo.play();
-      });
-    });
-
-    bbVideo.addEventListener('timeupdate', function () {
-      var t = bbVideo.currentTime, current = 0;
-      if (t >= bbEnd) {
-        bbVideo.pause();
-        bbEnd = Infinity;
-      }
-      for (var i = 0; i < bbStarts.length; i++) {
-        if (t >= bbStarts[i]) current = i;
-      }
-      bbBtns.forEach(function (b, i) { b.classList.toggle('active', i === current); });
-    });
+    setupChapters(
+      document.getElementById('tutplayer'),
+      document.querySelectorAll('#videos .chapters button')
+    );
+    setupChapters(
+      document.getElementById('bbplayer'),
+      document.querySelectorAll('#blackboard .chapters button')
+    );
   </script>
 
 </body>

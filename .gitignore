@@ -1,5 +1,6 @@
 ~$*
 *.tmp
 videos/*.mov
+videos/MAXHUB Operating*
 Thumbs.db
 .DS_Store
